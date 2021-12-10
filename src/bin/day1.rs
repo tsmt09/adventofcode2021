@@ -63,7 +63,12 @@ mod tests {
 
     #[test]
     fn test_measure_increases() {
-        let testvec = vec![1, 2, 3, 2, 4, 5];
-        assert_eq!(4, measure_increases(testvec));
+        let testvec = vec![199i32, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+        assert_eq!(7, measure_increases(testvec));
+    }
+    #[test]
+    fn test_three_measurement() {
+        let testvec = vec![199i32, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+        assert_eq!(5, three_measurement(testvec));
     }
 }
