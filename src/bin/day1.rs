@@ -56,3 +56,14 @@ fn main() {
     let three_increases = three_measurement(vector_tree);
     println!("Three increases number count: {}", three_increases);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_measure_increases() {
+        let testvec = vec![1, 2, 3, 2, 4, 5];
+        assert_eq!(4, measure_increases(testvec));
+    }
+}

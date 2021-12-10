@@ -1,8 +1,0 @@
-on: push
-
-jobs:
-  builds:
-    runs-on: rust-latest
-    steps:
-      - name: builds cargo
-        run: cargo build
