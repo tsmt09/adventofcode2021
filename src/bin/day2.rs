@@ -77,7 +77,6 @@ fn main() {
     let stdin = io::stdin();
     let lines = stdin.lock().lines();
     let mut vec_str: Vec<String> = Vec::new();
-    let re = Regex::new(r"^(\w+)\s(\d+)$").unwrap();
     /* parse line into commands */
     for line in lines {
         match line {
@@ -107,7 +106,6 @@ fn main() {
 }
 
 
-#[cfg(test)]
 #[cfg(test)]
 mod tests {
     use super::*;
