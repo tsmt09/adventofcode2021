@@ -1,5 +1,18 @@
-use std::io;
-use std::io::BufRead;
+extern crate utilities;
+use std::path::PathBuf;
+use structopt::StructOpt;
+
+#[derive(StructOpt, Debug)]
+#[structopt(name = "day3", version = "1.0.0")]
+struct Args {
+    // The number of occurrences of the `v/verbose` flag
+    /// Verbose mode (-v, -vv, -vvv, etc.)
+    ///#[structopt(short, parse(from_occurrences))]
+    ///verbose: u8,
+    /// Files to process
+    #[structopt(short, long, parse(from_os_str))]
+    file: PathBuf,
+}
 
 struct Rates {
     gamma: u32,
@@ -18,21 +31,27 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         let mut oxy_ones = 0;
         let mut oxy_zeros = 0;
         for line in oxygenfilter.clone() {
-            let getchar: char = line.chars().nth(index).unwrap();
+            let getchar: char = match line.chars().nth(index) {
+                Some(n) => n,
+                None => '_'
+            };
             match getchar {
                 '0' => { oxy_zeros = oxy_zeros + 1; }
                 '1' => { oxy_ones = oxy_ones + 1; }
-                _ => panic!("Unknown character in line: {}", line)
+                _ => println!("cannot parse character in line: {}", line)
             }
         }
         let mut o2_ones = 0;
         let mut o2_zeros = 0;
         for line in o2filter.clone() {
-            let getchar: char = line.chars().nth(index).unwrap();
+            let getchar: char = match line.chars().nth(index) {
+                Some(n) => n,
+                None => '_'
+            };
             match getchar {
                 '0' => { o2_zeros = o2_zeros + 1; }
                 '1' => { o2_ones = o2_ones + 1; }
-                _ => panic!("Unknown character in line: {}", line)
+                _ => println!("cannot parse character in line: {}", line)
             }
         }
         /* decide what is to be filtered */
@@ -47,7 +66,10 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         /* first filter */
         if oxygenfilter.len() > 1 {
             oxygenfilter.retain(|line| {
-                let getchar: char = line.chars().nth(index).unwrap();
+                let getchar: char = match line.chars().nth(index) {
+                    Some(n) => n,
+                    None => 'x'
+                };
                 if getchar == oxyfilter_char {
                     return true;
                 }
@@ -56,7 +78,10 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         }
         if o2filter.len() > 1 {
             o2filter.retain(|line| {
-                let getchar: char = line.chars().nth(index).unwrap();
+                let getchar: char = match line.chars().nth(index) {
+                    Some(n) => n,
+                    None => 'x'
+                };
                 if getchar == o2filter_char {
                     return true;
                 }
@@ -71,7 +96,10 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
             index += 1;
         }
         if index == limit {
-            panic!("filtering out of bounds {}", index)
+            dbg!(&mut oxygenfilter);
+            dbg!(&mut o2filter);
+            panic!("filtering out of bounds {}\noxygenfilter.len(): {}\no2filter.len(): {}",
+            index, oxygenfilter.len(), o2filter.len())
         }
     }
 }
@@ -83,11 +111,14 @@ fn calculate_rates(data: Vec<String>) -> Rates {
     /* iterate data and add to vectors */
     for line in data.clone() {
         for index in 0..line_length {
-            let getchar: char = line.chars().nth(index).unwrap();
+            let getchar: char = match line.chars().nth(index) {
+                Some(n) => n,
+                None => '_'
+            };
             match getchar {
                 '0' => { zero_count[index] = zero_count[index] + 1; }
                 '1' => { one_count[index] = one_count[index] + 1; }
-                _ => panic!("Unknown character in line: {}", line)
+                _ => println!("cannot parse character in line: {}", line)
             }
         }
     }
@@ -114,20 +145,8 @@ fn calculate_rates(data: Vec<String>) -> Rates {
 }
 
 fn main() {
-    let stdin = io::stdin();
-    let lines = stdin.lock().lines();
-    let mut vec_str: Vec<String> = Vec::new();
-    /* parse line into commands */
-    for line in lines {
-        match line {
-            Ok(str_line) => {
-                vec_str.push(str_line)
-            }
-            Err(err) => {
-                println!("error reading stdin: {}", err)
-            }
-        }
-    }
+    let args = Args::from_args();
+    let vec_str = utilities::files::open_file(args.file);
     let rates = calculate_rates(vec_str);
     println!("The Rates are:\ngamma: {:b}\nepsilon: {:b}\nepsilon*gamma: {}",
             rates.gamma, rates.epsilon, rates.epsilon*rates.gamma);
