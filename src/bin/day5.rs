@@ -86,11 +86,6 @@ fn build_field(field_definition: FieldDefinition) -> Field {
     field
 }
 
-fn print_field(field: &Field) {
-    for line in &field.field {
-        println!("{:?}", line);
-    }
-}
 
 fn deploy_commands(field: &mut Field) {
     for command in &field.definition.commands {
@@ -175,6 +170,12 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    
+    fn print_field(field: &Field) {
+        for line in &field.field {
+            println!("{:?}", line);
+        }
+    }
     use super::*;
 
     #[test]
