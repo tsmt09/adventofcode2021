@@ -5,11 +5,11 @@ use std::thread;
 
 #[derive(Debug, Clone, Copy)]
 struct Lanternfish {
-    birth_timer: u32
+    birth_timer: u8
 }
 
 impl Lanternfish {
-    fn new(bt: u32) -> Lanternfish {
+    fn new(bt: u8) -> Lanternfish {
         Lanternfish {
             birth_timer: bt 
         }
@@ -29,9 +29,9 @@ impl Lanternfish {
 fn parse_startfishes(input: Vec<String>) -> Vec<Lanternfish> {
     let mut startfishes: Vec<Lanternfish> = Vec::new();
     if !input.is_empty() {
-        let lifetimes: Vec<u32> = input[0]
+        let lifetimes: Vec<u8> = input[0]
                         .split(',')
-                        .map(|e| e.parse::<u32>().unwrap())
+                        .map(|e| e.parse::<u8>().unwrap())
                         .collect();
         for lt in lifetimes {
             startfishes.push(Lanternfish::new(lt));
@@ -126,7 +126,7 @@ mod tests {
         assert_eq!(26, fishes.len());
         fishes = simulate_lifetime(fishes, 80-18, 1, 1);
         assert_eq!(5934, fishes.len());
-        fishes = simulate_lifetime(fishes, 265-80, 4, 2000000);
+        fishes = simulate_lifetime(fishes, 265-80, 8, 2000000);
         assert_eq!(26984457539, fishes.len());
     }
 }
