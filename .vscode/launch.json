@@ -11,12 +11,12 @@
             "cargo": {
                 "args": ["build"],
                 "filter": {
-                    "name": "day6",
+                    "name": "day8",
                     "kind": "bin"
                 }
             },
             "program": "${workspaceFolder}/target/debug/day6",
-            "args": ["--chunksize", "5", "--file", "data/day6", "--threads", "2"],
+            "args": ["--file", "data/day8"],
             "cwd": "${workspaceFolder}"
         },
         {
@@ -24,9 +24,9 @@
             "request": "launch",
             "name": "Cargo Test Debug",
             "cargo": {
-                "args": ["build", "test"],
+                "args": ["test"],
                 "filter": {
-                    "name": "day6",
+                    "name": "day8",
                     "kind": "bin"
                 }
             },

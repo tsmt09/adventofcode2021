@@ -1,15 +1,15 @@
 extern crate utilities;
-use utilities::stringparsers::parse_string_as_vec_int;
-use utilities::files::open_file;
+use statistical;
 use std::path::PathBuf;
 use structopt::StructOpt;
-use statistical;
+use utilities::files::open_file;
+use utilities::stringparsers::parse_string_as_vec_int;
 
 #[derive(Debug)]
 struct CrabsInSubmarines {
     crabs: Vec<i128>,
     min: i128,
-    max: i128
+    max: i128,
 }
 
 impl CrabsInSubmarines {
@@ -17,7 +17,7 @@ impl CrabsInSubmarines {
         CrabsInSubmarines {
             crabs: Vec::new(),
             min: 0,
-            max: 0
+            max: 0,
         }
     }
 }
@@ -26,21 +26,20 @@ impl CrabsInSubmarines {
 #[structopt(name = "day3", version = "1.0.0")]
 struct Args {
     #[structopt(short = "f", long, parse(from_os_str))]
-    file: PathBuf
+    file: PathBuf,
 }
 
 fn parse_crabs(input: Vec<String>) -> CrabsInSubmarines {
     let mut crabs = CrabsInSubmarines::new();
     if !input.is_empty() {
-        crabs.crabs = 
-            parse_string_as_vec_int(&input[0], ',');
+        crabs.crabs = parse_string_as_vec_int(&input[0], ',');
         crabs.min = match crabs.crabs.iter().min() {
             Some(min) => *min,
-            None => 0i128
+            None => 0i128,
         };
         crabs.max = match crabs.crabs.iter().max() {
-            Some (max) => *max,
-            None => 0i128
+            Some(max) => *max,
+            None => 0i128,
         };
     }
     crabs
@@ -61,13 +60,20 @@ fn find_horizontal_with_lowest_fuel(crabs: CrabsInSubmarines) -> i128 {
         fuels.push(fuel);
     }
     dbg!(&fuels);
-    println!("min fuel used to get all crabs to a position: {}", fuels.iter().min().unwrap());
-    println!("min fuel used to get all crabs to median {}: {}", median, fuels.iter().nth(median as usize).unwrap());
+    println!(
+        "min fuel used to get all crabs to a position: {}",
+        fuels.iter().min().unwrap()
+    );
+    println!(
+        "min fuel used to get all crabs to median {}: {}",
+        median,
+        fuels.iter().nth(median as usize).unwrap()
+    );
     *fuels.iter().min().unwrap()
 }
 
 fn main() {
-    let args = Args::from_args();  
+    let args = Args::from_args();
     let vec_str = open_file(args.file);
     let crabs = parse_crabs(vec_str);
     find_horizontal_with_lowest_fuel(crabs);
@@ -79,9 +85,7 @@ mod tests {
 
     #[test]
     fn crabs_test() {
-        let testvec: Vec<String> = vec![
-            "16,1,2,0,4,2,7,1,2,14".to_string(),
-        ];
+        let testvec: Vec<String> = vec!["16,1,2,0,4,2,7,1,2,14".to_string()];
         let crabs = parse_crabs(testvec);
         assert_eq!(crabs.crabs.len(), 10);
         assert_eq!(crabs.min, 0);

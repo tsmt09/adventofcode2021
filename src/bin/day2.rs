@@ -1,27 +1,27 @@
+use regex::Regex;
 use std::io;
 use std::io::BufRead;
-use regex::Regex;
 
 enum CommandType {
     Forward,
     Up,
     Down,
-    Unknown
+    Unknown,
 }
 
 struct Command {
     command: CommandType,
-    steps: i32
+    steps: i32,
 }
 
 struct Position {
     horizontal: i32,
     depth: i32,
-    aim: i32
+    aim: i32,
 }
 
 struct Boat {
-    position: Position
+    position: Position,
 }
 
 trait Movable {
@@ -37,7 +37,7 @@ impl Movable for Boat {
             CommandType::Forward => self.forward(cmd.steps),
             CommandType::Up => self.up(cmd.steps),
             CommandType::Down => self.down(cmd.steps),
-            CommandType::Unknown => panic!("command unknown!")
+            CommandType::Unknown => panic!("command unknown!"),
         }
     }
     fn forward(&mut self, steps: i32) {
@@ -65,9 +65,12 @@ fn parse_commands(vec_str: Vec<String>) -> Vec<Command> {
                     "down" => CommandType::Down,
                     _ => CommandType::Unknown,
                 };
-                commands.push(Command { command: parsedcmd, steps: captures[2].parse().unwrap() });
+                commands.push(Command {
+                    command: parsedcmd,
+                    steps: captures[2].parse().unwrap(),
+                });
             }
-            None => panic!("cannot regex parse line: {}", str_line)
+            None => panic!("cannot regex parse line: {}", str_line),
         }
     }
     commands
@@ -80,9 +83,7 @@ fn main() {
     /* parse line into commands */
     for line in lines {
         match line {
-            Ok(str_line) => {
-                vec_str.push(str_line)
-            }
+            Ok(str_line) => vec_str.push(str_line),
             Err(err) => {
                 println!("error reading stdin: {}", err)
             }
@@ -90,21 +91,28 @@ fn main() {
     }
     let commands = parse_commands(vec_str);
     /* create new boat */
-    let mut myboat: Boat = { Boat {
-        position: { Position {
-            horizontal: 0,
-            depth: 0,
-            aim: 0
-        }}
-    }};
+    let mut myboat: Boat = {
+        Boat {
+            position: {
+                Position {
+                    horizontal: 0,
+                    depth: 0,
+                    aim: 0,
+                }
+            },
+        }
+    };
     /* let it ride */
     for command in commands {
         myboat.do_command(command);
     }
-    println!("My Boat coordinates:\nhorizontal: {}\ndepth: {}\nmultiplied: {}", 
-    myboat.position.horizontal, myboat.position.depth, myboat.position.horizontal*myboat.position.depth);
+    println!(
+        "My Boat coordinates:\nhorizontal: {}\ndepth: {}\nmultiplied: {}",
+        myboat.position.horizontal,
+        myboat.position.depth,
+        myboat.position.horizontal * myboat.position.depth
+    );
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -113,21 +121,25 @@ mod tests {
     #[test]
     fn boat_test() {
         let testvec: Vec<String> = vec![
-            "forward 5".to_string(), 
-            "down 5".to_string(), 
-            "forward 8".to_string(), 
-            "up 3".to_string(), 
+            "forward 5".to_string(),
+            "down 5".to_string(),
+            "forward 8".to_string(),
+            "up 3".to_string(),
             "down 8".to_string(),
-            "forward 2".to_string()
+            "forward 2".to_string(),
         ];
         let commands = parse_commands(testvec);
-        let mut myboat: Boat = { Boat {
-            position: { Position {
-                horizontal: 0,
-                depth: 0,
-                aim: 0
-            }}
-        }};
+        let mut myboat: Boat = {
+            Boat {
+                position: {
+                    Position {
+                        horizontal: 0,
+                        depth: 0,
+                        aim: 0,
+                    }
+                },
+            }
+        };
         for command in commands {
             myboat.do_command(command);
         }

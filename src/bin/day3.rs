@@ -18,7 +18,7 @@ struct Rates {
     gamma: u32,
     epsilon: u32,
     oxygen: u32,
-    co2: u32
+    co2: u32,
 }
 
 fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
@@ -33,12 +33,16 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         for line in oxygenfilter.clone() {
             let getchar: char = match line.chars().nth(index) {
                 Some(n) => n,
-                None => '_'
+                None => '_',
             };
             match getchar {
-                '0' => { oxy_zeros = oxy_zeros + 1; }
-                '1' => { oxy_ones = oxy_ones + 1; }
-                _ => println!("cannot parse character in line: {}", line)
+                '0' => {
+                    oxy_zeros = oxy_zeros + 1;
+                }
+                '1' => {
+                    oxy_ones = oxy_ones + 1;
+                }
+                _ => println!("cannot parse character in line: {}", line),
             }
         }
         let mut o2_ones = 0;
@@ -46,12 +50,16 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         for line in o2filter.clone() {
             let getchar: char = match line.chars().nth(index) {
                 Some(n) => n,
-                None => '_'
+                None => '_',
             };
             match getchar {
-                '0' => { o2_zeros = o2_zeros + 1; }
-                '1' => { o2_ones = o2_ones + 1; }
-                _ => println!("cannot parse character in line: {}", line)
+                '0' => {
+                    o2_zeros = o2_zeros + 1;
+                }
+                '1' => {
+                    o2_ones = o2_ones + 1;
+                }
+                _ => println!("cannot parse character in line: {}", line),
             }
         }
         /* decide what is to be filtered */
@@ -68,7 +76,7 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
             oxygenfilter.retain(|line| {
                 let getchar: char = match line.chars().nth(index) {
                     Some(n) => n,
-                    None => 'x'
+                    None => 'x',
                 };
                 if getchar == oxyfilter_char {
                     return true;
@@ -80,7 +88,7 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
             o2filter.retain(|line| {
                 let getchar: char = match line.chars().nth(index) {
                     Some(n) => n,
-                    None => 'x'
+                    None => 'x',
                 };
                 if getchar == o2filter_char {
                     return true;
@@ -98,8 +106,12 @@ fn calculate_oxygen(data: Vec<String>) -> (u32, u32) {
         if index == limit {
             dbg!(&mut oxygenfilter);
             dbg!(&mut o2filter);
-            panic!("filtering out of bounds {}\noxygenfilter.len(): {}\no2filter.len(): {}",
-            index, oxygenfilter.len(), o2filter.len())
+            panic!(
+                "filtering out of bounds {}\noxygenfilter.len(): {}\no2filter.len(): {}",
+                index,
+                oxygenfilter.len(),
+                o2filter.len()
+            )
         }
     }
 }
@@ -113,12 +125,16 @@ fn calculate_rates(data: Vec<String>) -> Rates {
         for index in 0..line_length {
             let getchar: char = match line.chars().nth(index) {
                 Some(n) => n,
-                None => '_'
+                None => '_',
             };
             match getchar {
-                '0' => { zero_count[index] = zero_count[index] + 1; }
-                '1' => { one_count[index] = one_count[index] + 1; }
-                _ => println!("cannot parse character in line: {}", line)
+                '0' => {
+                    zero_count[index] = zero_count[index] + 1;
+                }
+                '1' => {
+                    one_count[index] = one_count[index] + 1;
+                }
+                _ => println!("cannot parse character in line: {}", line),
             }
         }
     }
@@ -136,11 +152,11 @@ fn calculate_rates(data: Vec<String>) -> Rates {
     }
     /* calc oxygen and co2 */
     let (oxygen, co2) = calculate_oxygen(data.clone());
-    Rates { 
+    Rates {
         gamma: gamma_rate,
         epsilon: epsilon_rate,
         oxygen: oxygen,
-        co2: co2
+        co2: co2,
     }
 }
 
@@ -148,10 +164,18 @@ fn main() {
     let args = Args::from_args();
     let vec_str = utilities::files::open_file(args.file);
     let rates = calculate_rates(vec_str);
-    println!("The Rates are:\ngamma: {:b}\nepsilon: {:b}\nepsilon*gamma: {}",
-            rates.gamma, rates.epsilon, rates.epsilon*rates.gamma);
-    println!("The Ratings are:\nco2: {:b}\noxygen: {:b}\nco2*oxygen: {}",
-            rates.co2, rates.oxygen, rates.co2*rates.oxygen);
+    println!(
+        "The Rates are:\ngamma: {:b}\nepsilon: {:b}\nepsilon*gamma: {}",
+        rates.gamma,
+        rates.epsilon,
+        rates.epsilon * rates.gamma
+    );
+    println!(
+        "The Ratings are:\nco2: {:b}\noxygen: {:b}\nco2*oxygen: {}",
+        rates.co2,
+        rates.oxygen,
+        rates.co2 * rates.oxygen
+    );
 }
 
 #[cfg(test)]
@@ -180,7 +204,7 @@ mod tests {
         assert_eq!(9, rates.epsilon);
         assert_eq!(10, rates.co2);
         assert_eq!(23, rates.oxygen);
-        assert_eq!(230, rates.co2*rates.oxygen);
-        assert_eq!(198, rates.gamma*rates.epsilon);
+        assert_eq!(230, rates.co2 * rates.oxygen);
+        assert_eq!(198, rates.gamma * rates.epsilon);
     }
 }

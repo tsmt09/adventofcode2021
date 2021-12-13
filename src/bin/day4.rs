@@ -19,7 +19,7 @@ struct Field {
     field: [[i32; 5]; 5],
     hits: [[bool; 5]; 5],
     sum: i32,
-    filledlines: usize
+    filledlines: usize,
 }
 
 fn parse_board(data: Vec<String>) -> (Vec<i32>, Vec<Field>) {
@@ -36,7 +36,7 @@ fn parse_board(data: Vec<String>) -> (Vec<i32>, Vec<Field>) {
         field: [[0; 5]; 5],
         hits: [[false; 5]; 5],
         sum: 0,
-        filledlines: 0
+        filledlines: 0,
     };
     for line in workiterator {
         if line.is_empty() {
@@ -48,7 +48,7 @@ fn parse_board(data: Vec<String>) -> (Vec<i32>, Vec<Field>) {
                 field: [[0; 5]; 5],
                 hits: [[false; 5]; 5],
                 sum: 0,
-                filledlines: 0
+                filledlines: 0,
             };
         } else {
             if work_field.filledlines >= 5 {
@@ -60,14 +60,17 @@ fn parse_board(data: Vec<String>) -> (Vec<i32>, Vec<Field>) {
                 .map(|element| element.trim().parse::<i32>().unwrap())
                 .collect();
             if numbers_line.len() == 5 {
-                work_field.sum += numbers_line[0] + numbers_line[1] +
-                    numbers_line[2] + numbers_line[3] + numbers_line[4];
+                work_field.sum += numbers_line[0]
+                    + numbers_line[1]
+                    + numbers_line[2]
+                    + numbers_line[3]
+                    + numbers_line[4];
                 work_field.field[work_field.filledlines] = [
                     numbers_line[0],
                     numbers_line[1],
                     numbers_line[2],
                     numbers_line[3],
-                    numbers_line[4]
+                    numbers_line[4],
                 ];
                 work_field.filledlines += 1;
             } else {
@@ -87,8 +90,13 @@ fn calc_and_print_hit(field: &Field, number: i32) -> i32 {
             }
         }
     }
-    println!("Hit found! Sum: {}, Number: {}, Score: {}", sum, number, sum*number);
-    return sum*number;
+    println!(
+        "Hit found! Sum: {}, Number: {}, Score: {}",
+        sum,
+        number,
+        sum * number
+    );
+    return sum * number;
 }
 
 fn play(input: Vec<i32>, fields: &mut Vec<Field>) -> i32 {

@@ -3,7 +3,7 @@ use std::io::BufRead;
 use std::io::Lines;
 use std::io::StdinLock;
 
-fn get_vector_from_lines(lines: Lines<StdinLock<>>) -> Vec<i32> {
+fn get_vector_from_lines(lines: Lines<StdinLock>) -> Vec<i32> {
     let mut int_vec: Vec<i32> = Vec::new();
     for line in lines {
         match line {

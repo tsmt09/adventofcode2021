@@ -1,8 +1,8 @@
 extern crate utilities;
-use std::path::PathBuf;
-use structopt::StructOpt;
 use regex::Regex;
 use std::cmp::max;
+use std::path::PathBuf;
+use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "day3", version = "1.0.0")]
@@ -19,43 +19,43 @@ struct Args {
 #[derive(Debug)]
 struct Coordinate {
     x: usize,
-    y: usize
+    y: usize,
 }
 #[derive(Debug)]
 struct Command {
     from: Coordinate,
-    to: Coordinate
+    to: Coordinate,
 }
 #[derive(Debug)]
 struct FieldDefinition {
     commands: Vec<Command>,
     max_x: usize,
-    max_y: usize
+    max_y: usize,
 }
 
 #[derive(Debug)]
 struct Field {
     definition: FieldDefinition,
-    field: Vec<Vec<i8>>
+    field: Vec<Vec<i8>>,
 }
 
 fn parse_field_definition(string: Vec<String>) -> FieldDefinition {
     let mut field_definition = FieldDefinition {
         commands: Vec::new(),
         max_x: 0,
-        max_y: 0
+        max_y: 0,
     };
     let re = Regex::new(r"^(\d+),(\d+)\s->\s(\d+),(\d+)$").unwrap();
     for str_line in string {
         match re.captures(&str_line) {
             Some(captures) => {
                 let mut cmd: Command = Command {
-                    from: Coordinate { x:0 , y:0 },
-                    to: Coordinate { x:0 , y:0 }
+                    from: Coordinate { x: 0, y: 0 },
+                    to: Coordinate { x: 0, y: 0 },
                 };
                 /* parse values */
                 cmd.from.x = captures[1].parse::<usize>().unwrap();
-                cmd.from.y = captures[2].parse::<usize>().unwrap(); 
+                cmd.from.y = captures[2].parse::<usize>().unwrap();
                 cmd.to.x = captures[3].parse::<usize>().unwrap();
                 cmd.to.y = captures[4].parse::<usize>().unwrap();
                 /* find max values */
@@ -66,7 +66,7 @@ fn parse_field_definition(string: Vec<String>) -> FieldDefinition {
                 /* push data */
                 field_definition.commands.push(cmd);
             }
-            None => panic!("cannot regex parse line: {}", str_line)
+            None => panic!("cannot regex parse line: {}", str_line),
         }
     }
     field_definition
@@ -74,18 +74,11 @@ fn parse_field_definition(string: Vec<String>) -> FieldDefinition {
 
 fn build_field(field_definition: FieldDefinition) -> Field {
     let field = Field {
-        field: vec![
-            vec![
-                0; 
-                field_definition.max_x + 1
-            ]; 
-            field_definition.max_y + 1
-        ],
-        definition: field_definition
+        field: vec![vec![0; field_definition.max_x + 1]; field_definition.max_y + 1],
+        definition: field_definition,
     };
     field
 }
-
 
 fn deploy_commands(field: &mut Field) {
     for command in &field.definition.commands {
@@ -170,7 +163,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    
+
     fn print_field(field: &Field) {
         for line in &field.field {
             println!("{:?}", line);
