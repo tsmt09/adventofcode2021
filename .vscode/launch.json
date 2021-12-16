@@ -8,14 +8,19 @@
             "type": "lldb",
             "request": "launch",
             "name": "Launch",
-            "cargo": {
-                "args": ["build"],
-                "filter": {
-                    "name": "day8",
-                    "kind": "bin"
-                }
+            "preLaunchTask": {
+                "type": "cargo",
+                "command": "build",
+                "problemMatcher": [
+                    "$rustc"
+                ],
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "label": "cargo build"
             },
-            "program": "${workspaceFolder}/target/debug/day6",
+            "program": "${workspaceFolder}/target/debug/day8",
             "args": ["--file", "data/day8"],
             "cwd": "${workspaceFolder}"
         },
@@ -23,13 +28,8 @@
             "type": "lldb",
             "request": "launch",
             "name": "Cargo Test Debug",
-            "cargo": {
-                "args": ["test"],
-                "filter": {
-                    "name": "day8",
-                    "kind": "bin"
-                }
-            },
+            "program": "cargo",
+            "args": ["test", "--bin", "day8"],
             "cwd": "${workspaceFolder}"
         }
     ]
