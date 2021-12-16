@@ -1,4 +1,6 @@
 extern crate utilities;
+use std::collections::HashSet;
+use std::hash::Hash;
 use std::path::PathBuf;
 use structopt::StructOpt;
 use utilities::files::open_file;
@@ -10,17 +12,17 @@ struct Args {
     file: PathBuf,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Signal {
-    encoding: Vec<String>,
-    signal: Vec<String>,
+    encoding: Vec<HashSet<char>>,
+    segments: Vec<HashSet<char>>,
 }
 
 impl Signal {
-    fn new(_encoding: Vec<String>, _signal: Vec<String>) -> Signal {
+    fn new(_encoding: Vec<HashSet<char>>, _segments: Vec<HashSet<char>>) -> Signal {
         Signal {
             encoding: _encoding,
-            signal: _signal,
+            segments: _segments,
         }
     }
 }
@@ -35,18 +37,51 @@ fn parse_signals(input: &Vec<String>) -> Vec<Signal> {
         if my_split.len() != 2 {
             panic!("Error parsing line {}", line)
         }
-        let encoding: Vec<String> = my_split[0].split(" ").map(|x| x.to_string()).collect();
-        let signal: Vec<String> = my_split[1].split(" ").map(|x| x.to_string()).collect();
-        my_signals.push(Signal::new(encoding, signal));
+        let encoding: Vec<HashSet<char>> = my_split[0]
+            .split(" ")
+            .map(|x| x.to_string().chars().collect())
+            .collect();
+        let segments: Vec<HashSet<char>> = my_split[1]
+            .split(" ")
+            .map(|x| x.to_string().chars().collect())
+            .collect();
+        my_signals.push(Signal::new(encoding, segments));
     }
     my_signals
+}
+
+fn assign1_count(signals: &Vec<Signal>) -> i32 {
+    let mut count: i32 = 0;
+    for signal in signals {
+        for segment in &signal.segments {
+            if [2, 3, 4, 7].contains(&segment.len()) {
+                count += 1;
+            }
+        }
+    }
+    count
+}
+
+fn analyze_encoding_and_return_number(signal: Signal) -> i32 {
+    // search for numbers in encodings
+    let one: Vec<&HashSet<char>> = signal.encoding.iter().filter(|x| x.len() == 2).collect();
+    let seven: Vec<&HashSet<char>> = signal.encoding.iter().filter(|x| x.len() == 2).collect();
+    let four: Vec<&HashSet<char>> = signal.encoding.iter().filter(|x| x.len() == 2).collect();
+    let eight: Vec<&HashSet<char>> = signal.encoding.iter().filter(|x| x.len() == 2).collect();
+    let mut top: Vec<&HashSet<char>> = seven.clone();
+    top.retain(|x| one.contains(x));
+    // let mut nine_missing_bottom: HashSet<_> = four.union(&top).collect();
+    dbg!(top);
+    return 1;
 }
 
 fn main() {
     let args = Args::from_args();
     let vec_str = open_file(args.file);
     let signals = parse_signals(&vec_str);
-    dbg!(signals);
+    dbg!(&signals);
+    println!("Total count for assignment1: {}", assign1_count(&signals));
+    analyze_encoding_and_return_number(signals.iter().next().unwrap().clone());
 }
 
 #[cfg(test)]
@@ -71,5 +106,6 @@ mod tests {
         let signals = parse_signals(&testvec);
         dbg!(&signals);
         assert_eq!(testvec.len(), signals.len());
+        assert_eq!(assign1_count(&signals), 26);
     }
 }
