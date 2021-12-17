@@ -20,8 +20,11 @@
                 },
                 "label": "cargo build"
             },
-            "program": "${workspaceFolder}/target/debug/day8",
-            "args": ["--file", "data/day8"],
+            "program": "${workspaceFolder}/target/debug/day9",
+            "args": [
+                "--file",
+                "data/day9"
+            ],
             "cwd": "${workspaceFolder}"
         },
         {
@@ -29,7 +32,11 @@
             "request": "launch",
             "name": "Cargo Test Debug",
             "program": "cargo",
-            "args": ["test", "--bin", "day8"],
+            "args": [
+                "test",
+                "--bin",
+                "day9"
+            ],
             "cwd": "${workspaceFolder}"
         }
     ]

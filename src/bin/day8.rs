@@ -1,6 +1,5 @@
 extern crate utilities;
 use std::collections::HashSet;
-use std::hash::Hash;
 use std::path::PathBuf;
 use structopt::StructOpt;
 use utilities::files::open_file;
@@ -16,7 +15,7 @@ struct Args {
 struct Signal {
     encoding: Vec<HashSet<char>>,
     segments: Vec<HashSet<char>>,
-    string: String,
+    _string: String,
 }
 
 impl Signal {
@@ -28,7 +27,7 @@ impl Signal {
         Signal {
             encoding: _encoding,
             segments: _segments,
-            string: _string,
+            _string: _string,
         }
     }
 }
